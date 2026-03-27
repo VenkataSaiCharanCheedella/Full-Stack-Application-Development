@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JBU Episode 2 Premiere Launch</title>
+    <style>
+        /* =========================================================
+           CONFIGURABLE STYLES
+           ========================================================= */
+        :root {
+            --bg-color: #000000;       /* Black background */
+            --accent-red: #B5282A;     /* JBU red accent */
+            --text-white: #FFFFFF;     /* White text */
+            --glow-red: rgba(181, 40, 42, 0.4);
+            --glow-red-strong: rgba(181, 40, 42, 0.8);
+        }
+
+        /* =========================================================
+           GLOBAL STYLES
+           ========================================================= */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-white);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            overflow: hidden; /* Hide scrollbars for full screen effect */
+            user-select: none; /* Prevent text selection */
+            cursor: default; /* Default cursor */
+        }
+
+        /* =========================================================
+           BACKGROUND EFFECTS
+           ========================================================= */
+        #particles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--accent-red);
+            border-radius: 50%;
+            opacity: 0;
+            filter: blur(2px);
+            animation: float-up linear infinite;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
+        }
+
+        /* =========================================================
+           MAIN SCREEN (TITLE & BUTTON)
+           ========================================================= */
+        #main-container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+            transition: opacity 1s ease-out;
+        }
+
+        h1 {
+            font-size: 6rem;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--glow-red-strong);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin: 0 0 20px 0;
+            letter-spacing: 4px;
+            color: #DDDDDD;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        p.caption {
+            font-size: 1.4rem;
+            color: #AAAAAA;
+            margin-bottom: 80px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Launch Button Styling */
+        #launch-btn {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: transparent;
+            border: 4px solid var(--accent-red);
+            color: var(--text-white);
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 0 40px var(--glow-red), inset 0 0 20px var(--glow-red);
+            transition: all 0.3s ease;
+            animation: pulse 3s infinite;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        #launch-btn:hover {
+            box-shadow: 0 0 60px var(--glow-red-strong), inset 0 0 40px var(--glow-red-strong);
+            background: rgba(181, 40, 42, 0.15);
+            transform: scale(1.05);
+            border-color: #ff383b;
+        }
+
+        #launch-btn:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 30px var(--glow-red), inset 0 0 20px var(--glow-red); }
+            50% { box-shadow: 0 0 60px var(--glow-red-strong), inset 0 0 40px var(--glow-red-strong); }
+            100% { box-shadow: 0 0 30px var(--glow-red), inset 0 0 20px var(--glow-red); }
+        }
+
+        /* =========================================================
+           SCREEN TRANSITIONS & COUNTDOWN
+           ========================================================= */
+        #flash-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--accent-red);
+            opacity: 0;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        #countdown-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            background-color: var(--bg-color);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+
+        #countdown-number {
+            font-size: 20rem;
+            font-weight: bold;
+            color: var(--text-white);
+            text-shadow: 0 0 80px var(--glow-red-strong);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        #countdown-number.animate {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* =========================================================
+           VIDEO PLAYER
+           ========================================================= */
+        #video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20;
+            background-color: #000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease-in;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Fill entire screen */
+            outline: none;
+            border: none;
+        }
+
+        /* Video Error Message */
+        #video-error {
+            position: absolute;
+            color: var(--text-white);
+            font-size: 2rem;
+            display: none;
+            z-index: 21;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px 50px;
+            border: 2px solid var(--accent-red);
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 0 30px var(--glow-red स्ट्रांग);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 1. Background Particles -->
+    <div id="particles-container"></div>
+
+    <!-- 2. Flash Overlay for click effect -->
+    <div id="flash-overlay"></div>
+
+    <!-- 3. Main Launch Screen -->
+    <div id="main-container">
+        <!-- EDIT TEXT HERE -->
+        <h1>JUST BETWEEN US</h1>
+        <h2>Episode 2 Premiere</h2>
+        <p class="caption">Launched at Lavaza – Vel Tech University</p>
+        
+        <div class="launch-button-container">
+            <button id="launch-btn">LAUNCH<br>EPISODE</button>
+        </div>
+    </div>
+
+    <!-- 4. Countdown Screen -->
+    <div id="countdown-container">
+        <div id="countdown-number">3</div>
+    </div>
+
+    <!-- 5. Video Player Screen -->
+    <div id="video-container">
+        <!-- No controls exposed for a pure cinematic feel -->
+        <video id="video-player" playsinline preload="auto"></video>
+        <div id="video-error">
+            Video file not found.<br><br>
+            <span style="font-size: 1.2rem; color: #ccc;">Please check <b>episode2.mp4</b> in the folder.</span>
+        </div>
+    </div>
+
+    <!-- =========================================================
+         JAVASCRIPT LOGIC
+         ========================================================= -->
+    <script>
+        // --- CONFIGURATION ---
+        const CONFIG = {
+            videoSrc: "episode2.mov",        // Video file to play
+            hoverSoundSrc: "hover.mp3",      // Sound on hover
+            launchSoundSrc: "launch.mp3",    // Sound on click
+            countdownStart: 3                // Countdown seconds
+        };
+
+        // --- ELEMENTS ---
+        const launchBtn = document.getElementById('launch-btn');
+        const mainContainer = document.getElementById('main-container');
+        const flashOverlay = document.getElementById('flash-overlay');
+        const countdownContainer = document.getElementById('countdown-container');
+        const countdownNumber = document.getElementById('countdown-number');
+        const videoContainer = document.getElementById('video-container');
+        const videoElement = document.getElementById('video-player');
+        const videoError = document.getElementById('video-error');
+        const particlesContainer = document.getElementById('particles-container');
+
+        // --- AUDIO PREPARATION ---
+        const hoverSound = new Audio(CONFIG.hoverSoundSrc);
+        const launchSound = new Audio(CONFIG.launchSoundSrc);
+        
+        // Attempt to preload audio (browsers may restrict without interaction)
+        hoverSound.load();
+        launchSound.load();
+
+        // --- BACKGROUND EFFECT: GENERATE PARTICLES ---
+        function createParticles() {
+            for(let i = 0; i < 40; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Randomize size between 2px and 6px
+                const size = Math.random() * 4 + 2; 
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Randomize horizontal placement
+                particle.style.left = `${Math.random() * 100}%`;
+                
+                // Randomize animation duration and delay
+                particle.style.animationDuration = `${Math.random() * 6 + 4}s`; // 4 to 10 seconds
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // --- INTERACTION: HOVER ---
+        launchBtn.addEventListener('mouseenter', () => {
+            // Reset and play hover sound (ignore error if browser blocks auto-play before click)
+            hoverSound.currentTime = 0;
+            hoverSound.play().catch(e => console.warn('Hover audio required interaction:', e));
+        });
+
+        // --- INTERACTION: CLICK ---
+        launchBtn.addEventListener('click', () => {
+            startLaunchSequence();
+        });
+
+        // --- CORE LOGIC: LAUNCH SEQUENCE ---
+        function startLaunchSequence() {
+            // 1. Play dramatic launch sound
+            launchSound.currentTime = 0;
+            launchSound.play().catch(e => console.error('Launch audio error:', e));
+            
+            // 2. Flash animation to transition out
+            flashOverlay.style.opacity = '1';
+            flashOverlay.style.transition = 'opacity 0.1s ease-out';
+            
+            setTimeout(() => {
+                // Fade out the flash slowly
+                flashOverlay.style.transition = 'opacity 2s ease-in';
+                flashOverlay.style.opacity = '0';
+                
+                // Hide main screen content underneath the flash
+                mainContainer.style.opacity = '0';
+                particlesContainer.style.opacity = '0';
+                
+                setTimeout(() => {
+                    // Disable interactions for hidden elements
+                    mainContainer.style.pointerEvents = 'none';
+                    particlesContainer.style.display = 'none';
+                    
+                    // Proceed to countdown
+                    startCountdown();
+                }, 1000); // give time for fade
+                
+            }, 150); // duration of peak flash
+        }
+
+        // --- CORE LOGIC: COUNTDOWN ---
+        function startCountdown() {
+            countdownContainer.style.opacity = '1';
+            let count = CONFIG.countdownStart;
+            
+            function animateNumber(num) {
+                countdownNumber.textContent = num;
+                // Remove class to reset animation state
+                countdownNumber.classList.remove('animate');
+                
+                // Force a browser reflow to restart CSS animation
+                void countdownNumber.offsetWidth; 
+                
+                // Add class back to trigger scale/fade animation
+                countdownNumber.classList.add('animate');
+            }
+            
+            // Show first number immediately
+            animateNumber(count);
+            
+            const interval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    animateNumber(count);
+                } else {
+                    clearInterval(interval);
+                    showVideoPlayer();
+                }
+            }, 1000); // 1-second ticks
+        }
+
+        // --- CORE LOGIC: PLAY VIDEO ---
+        function showVideoPlayer() {
+            // Hide countdown
+            countdownContainer.style.opacity = '0';
+            
+            setTimeout(() => {
+                // Show video container
+                videoContainer.style.pointerEvents = 'auto';
+                videoContainer.style.opacity = '1';
+                
+                // Set source and start play
+                videoElement.src = CONFIG.videoSrc;
+                videoElement.play().catch(e => {
+                    console.error('Video playing error (e.g. file missing):', e);
+                    videoError.style.display = 'block';
+                });
+                
+            }, 800); // slight pause after 1 disappears
+        }
+
+        // --- ERROR HANDLING FOR VIDEO ---
+        videoElement.addEventListener('error', (e) => {
+            console.error('Video loading failed.');
+            videoError.style.display = 'block';
+        });
+
+        // --- EXTRA CONTROLS ---
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.warn(`Fullscreen error: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        function resetPage() {
+            // Stop video
+            videoElement.pause();
+            videoElement.currentTime = 0;
+            videoElement.removeAttribute('src'); // unload
+            
+            // Stop sounds
+            launchSound.pause();
+            launchSound.currentTime = 0;
+            hoverSound.pause();
+            hoverSound.currentTime = 0;
+            
+            // Reset visibility
+            videoContainer.style.opacity = '0';
+            videoContainer.style.pointerEvents = 'none';
+            videoError.style.display = 'none';
+            
+            countdownContainer.style.opacity = '0';
+            
+            mainContainer.style.opacity = '1';
+            mainContainer.style.pointerEvents = 'auto';
+            
+            particlesContainer.style.opacity = '1';
+            particlesContainer.style.display = 'block';
+        }
+
+        // Keyboard Event Listener
+        window.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'f') {
+                toggleFullscreen();
+            } else if (e.key.toLowerCase() === 'r') {
+                resetPage();
+            }
+        });
+
+    </script>
+</body>
+</html>
