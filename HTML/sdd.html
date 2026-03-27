@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Practice</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fdfcfb;
+      color: #333;
+      padding: 20px;
+    }
+
+    form {
+      background-color: #756e40cc;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      max-width: 500px;
+      margin: auto;
+    }
+
+    h4 {
+      text-align: center;
+      color: #6b5b95;
+      font-size: 24px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background-color: #fffdfd;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    label {
+      display: block;
+      margin-top: 8px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    input[type="submit"] {
+      background-color: #ffb7b2;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      margin-top: 15px;
+      display: block;
+      width: 100%;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #f67280;
+    }
+
+    p {
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <h4>Registration form!</h4>
+
+  <form action="https://formspree.io/f/xeokawkk" method="POST">
+    <p>Please enter your credentials:</p>
+    <input type="text" placeholder="User name" name="username">
+    <br><br>
+    <input type="password" placeholder="Password" name="password">
+    <br><br>
+
+    <p>Please select your city:</p>
+    <select name="city">
+      <option value="kandukur">Kandukur</option>
+      <option value="ongole">Ongole</option>
+      <option value="hyderabad">Hyderabad</option>
+    </select>
+    <br><br>
+
+    <p>Please select your class:</p>
+    <label><input type="radio" value="class 1" name="class">Class 1</label>
+    <label><input type="radio" value="class 2" name="class">Class 2</label>
+    <label><input type="radio" value="class 3" name="class">Class 3</label>
+    <br><br>
+
+    <p>Please select your interested subjects:</p>
+    <label><input type="checkbox" value="math" name="subject">Mathematics</label>
+    <label><input type="checkbox" value="phy" name="subject">Physics</label>
+    <label><input type="checkbox" value="chem" name="subject">Chemistry</label>
+    <br><br>
+
+    <p>Your suggestions and feedback:</p>
+    <textarea name="feedback" placeholder="Type your valuable feedback!" rows="5"></textarea>
+    <br>
+    
+    <input type="submit" value="Click here to submit">
+  </form>
+
+</body>
+</html>

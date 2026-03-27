@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>University Question Paper Portal</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 30px;
+            background: #f0f0f0;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 700px;
+            margin: auto;
+        }
+        .paper {
+            padding: 12px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        a {
+            color: blue;
+            text-decoration: none;
+        }
+        #search {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #aaa;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Vel Tech Previous Year Question Papers</h1>
+
+<div class="container">
+    <input id="search" placeholder="Search subject, year, department...">
+
+    <div id="list">Loading...</div>
+</div>
+
+
+<script>
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHE4ZvMKpU63EGL2QzCXSd3-mVtIt9fqJghuBn83G7aImWEA_0Z5a8UYgYGnU__-fuqe6h4NV7bE6N/pub?gid=0&single=true&output=csv";
+
+async function loadData() {
+    const res = await fetch(SHEET_URL);
+    const text = await res.text();
+
+    const rows = text.split("\n").slice(1); 
+
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    rows.forEach(row => {
+        if (!row.trim()) return;
+
+        const [subject, year, dept, link] = row.split(",");
+
+        const item = document.createElement("div");
+        item.className = "paper";
+        item.innerHTML = `
+            <b>${subject}</b> (${year})<br>
+            <small>${dept}</small><br>
+            <a href="${link}" target="_blank">View Paper</a>
+        `;
+        list.appendChild(item);
+    });
+}
+
+// Search filter
+document.getElementById("search").addEventListener("input", function() {
+    const filter = this.value.toLowerCase();
+    const papers = document.querySelectorAll(".paper");
+
+    papers.forEach(p => {
+        p.style.display = p.innerText.toLowerCase().includes(filter) ? "block" : "none";
+    });
+});
+
+loadData();
+</script>
+
+</body>
+</html>
